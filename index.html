@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía Didáctica: Vehículo Radiocontrolado con micro:bit y Wukong</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                            700: '#0f766e',
+                            900: '#134e4a',
+                        },
+                        wukong: {
+                            500: '#ff6b00',
+                            600: '#e05d00',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar and print styles */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Styles for Print / PDF Export */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            .print-break-inside-avoid {
+                break-inside: avoid;
+            }
+            .accordion-content {
+                display: block !important;
+                max-height: none !important;
+                opacity: 1 !important;
+            }
+            .shadow-lg, .shadow-xl, .shadow-md, .shadow-sm {
+                box-shadow: none !important;
+                border: 1px solid #e2e8f0 !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-brand-500 selection:text-white">
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-5 right-5 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none bg-slate-900 text-white px-5 py-3 rounded-xl shadow-2xl flex items-center space-x-3 border border-slate-700">
+        <i data-lucide="check-circle" class="w-5 h-5 text-emerald-400"></i>
+        <span id="toast-message" class="text-sm font-medium">¡Código copiado al portapapeles!</span>
+    </div>
+
+    <!-- HEADER / HERO SECTION -->
+    <header class="bg-gradient-to-r from-slate-900 via-brand-900 to-slate-900 text-white border-b border-brand-700 relative overflow-hidden">
+        <!-- Background decorative elements -->
+        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#38bdf8_1px,transparent_1px)] [background-size:16px_16px]"></div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 relative z-10">
+            <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                <div class="space-y-3">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-brand-500/20 text-brand-100 border border-brand-500/30">
+                            ELECFREAKS Wonder Kit
+                        </span>
+                        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-amber-500/20 text-amber-200 border border-amber-500/30">
+                            micro:bit Radio Control
+                        </span>
+                        <span class="px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/20 text-purple-200 border border-purple-500/30">
+                            Robótica Educativa
+                        </span>
+                    </div>
+                    <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white">
+                        Vehículo Radiocontrolado con micro:bit
+                    </h1>
+                    <p class="text-slate-300 text-base sm:text-lg max-w-3xl leading-relaxed">
+                        Guía de proyecto para el aula: Diseña, construye y programa un móvil de tracción diferencial con la placa de expansión Wukong y control por radiofrecuencia.
+                    </p>
+                </div>
+
+                <!-- Action Button for PDF/Print -->
+                <div class="flex flex-col sm:flex-row md:flex-col gap-3 no-print shrink-0">
+                    <button onclick="window.print()" class="inline-flex items-center justify-center px-5 py-3 rounded-xl bg-brand-500 hover:bg-brand-600 text-white font-semibold shadow-lg shadow-brand-500/30 hover:shadow-brand-500/50 transition-all duration-200 group">
+                        <i data-lucide="printer" class="w-5 h-5 mr-2 group-hover:scale-110 transition-transform"></i>
+                        Imprimir / Guardar PDF
+                    </button>
+                    <a href="#codigo" class="inline-flex items-center justify-center px-5 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-medium border border-slate-700 transition-all">
+                        <i data-lucide="code" class="w-5 h-5 mr-2"></i>
+                        Ir al Código
+                    </a>
+                </div>
+            </div>
+
+            <!-- Quick Metadata Cards -->
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-8 pt-6 border-t border-slate-800">
+                <div class="flex items-center space-x-3 bg-slate-800/50 p-3 rounded-xl border border-slate-700/50">
+                    <div class="p-2.5 rounded-lg bg-brand-500/20 text-brand-400">
+                        <i data-lucide="graduation-cap" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs text-slate-400">Nivel Educativo</div>
+                        <div class="text-sm font-semibold text-white">Secundaria (12-16 años)</div>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-3 bg-slate-800/50 p-3 rounded-xl border border-slate-700/50">
+                    <div class="p-2.5 rounded-lg bg-amber-500/20 text-amber-400">
+                        <i data-lucide="clock" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs text-slate-400">Duración Estimada</div>
+                        <div class="text-sm font-semibold text-white">4 - 6 Sesiones</div>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-3 bg-slate-800/50 p-3 rounded-xl border border-slate-700/50">
+                    <div class="p-2.5 rounded-lg bg-purple-500/20 text-purple-400">
+                        <i data-lucide="lightbulb" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs text-slate-400">Metodología</div>
+                        <div class="text-sm font-semibold text-white">ABP + Design Thinking</div>
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-3 bg-slate-800/50 p-3 rounded-xl border border-slate-700/50">
+                    <div class="p-2.5 rounded-lg bg-blue-500/20 text-blue-400">
+                        <i data-lucide="users" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs text-slate-400">Organización</div>
+                        <div class="text-sm font-semibold text-white">Equipos de 2-4 alumnos</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- STICKY NAVIGATION BAR -->
+    <nav class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200 shadow-sm no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-14 overflow-x-auto no-scrollbar scroll-smooth">
+                <div class="flex space-x-1 sm:space-x-4 shrink-0">
+                    <a href="#ficha" class="px-3 py-2 rounded-lg text-xs sm:text-sm font-medium text-slate-600 hover:text-brand-600 hover:bg-brand-50 transition-colors flex items-center gap-1.5">
+                        <i data-lucide="file-text" class="w-4 h-4"></i> Ficha
+                    </a>
+                    <a href="#materiales" class="px-3 py-2 rounded-lg text-xs sm:text-sm font-medium text-slate-600 hover:text-brand-600 hover:bg-brand-50 transition-colors flex items-center gap-1.5">
+                        <i data-lucide="boxes" class="w-4 h-4"></i> Materiales
+                    </a>
+                    <a href="#diferencial" class="px-3 py-2 rounded-lg text-xs sm:text-sm font-medium text-slate-600 hover:text-brand-600 hover:bg-brand-50 transition-colors flex items-center gap-1.5">
+                        <i data-lucide="compass" class="w-4 h-4"></i> Tracción Diferencial
+                    </a>
+                    <a href="#sesiones" class="px-3 py-2 rounded-lg text-xs sm:text-sm font-medium text-slate-600 hover:text-brand-600 hover:bg-brand-50 transition-colors flex items-center gap-1.5">
+                        <i data-lucide="calendar" class="w-4 h-4"></i> Secuencia Didáctica
+                    </a>
+                    <a href="#codigo" class="px-3 py-2 rounded-lg text-xs sm:text-sm font-medium text-slate-600 hover:text-brand-600 hover:bg-brand-50 transition-colors flex items-center gap-1.5">
+                        <i data-lucide="code-2" class="w-4 h-4"></i> Código MakeCode
+                    </a>
+                    <a href="#retos" class="px-3 py-2 rounded-lg text-xs sm:text-sm font-medium text-slate-600 hover:text-brand-600 hover:bg-brand-50 transition-colors flex items-center gap-1.5">
+                        <i data-lucide="zap" class="w-4 h-4"></i> Retos & Soluciones
+                    </a>
+                    <a href="#rubrica" class="px-3 py-2 rounded-lg text-xs sm:text-sm font-medium text-slate-600 hover:text-brand-600 hover:bg-brand-50 transition-colors flex items-center gap-1.5">
+                        <i data-lucide="clipboard-check" class="w-4 h-4"></i> Rúbrica
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 space-y-16">
+
+        <!-- SECTION 1: FICHA DEL PROYECTO -->
+        <section id="ficha" class="scroll-mt-20 print-break-inside-avoid">
+            <div class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-brand-500/5 rounded-full blur-2xl -mr-10 -mt-10"></div>
+                
+                <div class="flex items-center space-x-3 mb-6">
+                    <div class="p-3 bg-brand-100 text-brand-700 rounded-xl">
+                        <i data-lucide="target" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-900">1. Resumen y Objetivos del Proyecto</h2>
+                        <p class="text-sm text-slate-500">Definición del reto de ingeniería y programación</p>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <!-- Reto -->
+                    <div class="bg-slate-50 rounded-xl p-5 border border-slate-200/80">
+                        <h3 class="font-semibold text-slate-900 mb-2 flex items-center text-base">
+                            <i data-lucide="flag" class="w-4 h-4 mr-2 text-brand-600"></i> El Desafío Central
+                        </h3>
+                        <p class="text-slate-600 text-sm leading-relaxed">
+                            Los estudiantes deberán <strong>diseñar, construir y programar</strong> un vehículo terrestre de estructura libre con dos motores impulsados por la placa de expansión <strong>Wukong (ELECFREAKS)</strong>. El robot será teledirigido a distancia sin cables, utilizando una segunda tarjeta micro:bit como mando a distancia que transmite órdenes por <strong>radiofrecuencia</strong>.
+                        </p>
+                    </div>
+
+                    <!-- Competencias / Objetivos -->
+                    <div class="bg-slate-50 rounded-xl p-5 border border-slate-200/80">
+                        <h3 class="font-semibold text-slate-900 mb-2 flex items-center text-base">
+                            <i data-lucide="award" class="w-4 h-4 mr-2 text-amber-500"></i> Objetivos Pedagógicos
+                        </h3>
+                        <ul class="space-y-2 text-sm text-slate-600">
+                            <li class="flex items-start">
+                                <i data-lucide="check" class="w-4 h-4 mr-2 text-emerald-500 shrink-0 mt-0.5"></i>
+                                <span><strong>Física y Mecánica:</strong> Comprender la tracción diferencial (variación de velocidad entre motores para rotación).</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i data-lucide="check" class="w-4 h-4 mr-2 text-emerald-500 shrink-0 mt-0.5"></i>
+                                <span><strong>Telecomunicación:</strong> Programar emisión y recepción de datos codificados mediante bloques de radio.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i data-lucide="check" class="w-4 h-4 mr-2 text-emerald-500 shrink-0 mt-0.5"></i>
+                                <span><strong>Ingeniería Estructural:</strong> Ajustar centro de gravedad, reducir fricción y asegurar rigidez mecánica con bloques tipo LEGO.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 2: MATERIALES CON CHECKLIST INTERACTIVA -->
+        <section id="materiales" class="scroll-mt-20 print-break-inside-avoid">
+            <div class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                    <div class="flex items-center space-x-3">
+                        <div class="p-3 bg-amber-100 text-amber-700 rounded-xl">
+                            <i data-lucide="boxes" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-bold text-slate-900">2. Inventario de Materiales por Equipo</h2>
+                            <p class="text-sm text-slate-500">Usa las casillas para verificar el kit antes de empezar la sesión</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Checklist Progress -->
+                    <div class="bg-slate-100 px-4 py-2 rounded-xl flex items-center space-x-3 border border-slate-200">
+                        <span class="text-xs font-semibold text-slate-600 uppercase tracking-wider">Verificados:</span>
+                        <span id="checklist-counter" class="text-sm font-bold text-brand-600">0 / 6</span>
+                        <div class="w-24 bg-slate-200 h-2 rounded-full overflow-hidden">
+                            <div id="checklist-progress" class="bg-brand-500 h-full w-0 transition-all duration-300"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Component 1 -->
+                    <label class="flex items-start p-4 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-slate-50 cursor-pointer transition-colors group">
+                        <input type="checkbox" onchange="updateChecklist()" class="checklist-item mt-1 rounded text-brand-600 focus:ring-brand-500 h-4 w-4 border-slate-300">
+                        <div class="ml-3">
+                            <span class="block text-sm font-semibold text-slate-900 group-hover:text-brand-700">2x Placas BBC micro:bit</span>
+                            <span class="text-xs text-slate-500">Versión V1 o V2 (Una para el mando y otra para el coche).</span>
+                        </div>
+                    </label>
+
+                    <!-- Component 2 -->
+                    <label class="flex items-start p-4 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-slate-50 cursor-pointer transition-colors group">
+                        <input type="checkbox" onchange="updateChecklist()" class="checklist-item mt-1 rounded text-brand-600 focus:ring-brand-500 h-4 w-4 border-slate-300">
+                        <div class="ml-3">
+                            <span class="block text-sm font-semibold text-slate-900 group-hover:text-brand-700">1x Placa Wukong (ELECFREAKS)</span>
+                            <span class="text-xs text-slate-500">Base con batería de litio integrada, zumbador y conectores de motor.</span>
+                        </div>
+                    </label>
+
+                    <!-- Component 3 -->
+                    <label class="flex items-start p-4 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-slate-50 cursor-pointer transition-colors group">
+                        <input type="checkbox" onchange="updateChecklist()" class="checklist-item mt-1 rounded text-brand-600 focus:ring-brand-500 h-4 w-4 border-slate-300">
+                        <div class="ml-3">
+                            <span class="block text-sm font-semibold text-slate-900 group-hover:text-brand-700">2x Motores de Bloque Geekservo</span>
+                            <span class="text-xs text-slate-500">Conectables a los puertos M1 y M2 de la Wukong.</span>
+                        </div>
+                    </label>
+
+                    <!-- Component 4 -->
+                    <label class="flex items-start p-4 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-slate-50 cursor-pointer transition-colors group">
+                        <input type="checkbox" onchange="updateChecklist()" class="checklist-item mt-1 rounded text-brand-600 focus:ring-brand-500 h-4 w-4 border-slate-300">
+                        <div class="ml-3">
+                            <span class="block text-sm font-semibold text-slate-900 group-hover:text-brand-700">Kit de Piezas ELECFREAKS Wonder</span>
+                            <span class="text-xs text-slate-500">Bloques de construcción, vigas perforadas, ejes y ruedas.</span>
+                        </div>
+                    </label>
+
+                    <!-- Component 5 -->
+                    <label class="flex items-start p-4 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-slate-50 cursor-pointer transition-colors group">
+                        <input type="checkbox" onchange="updateChecklist()" class="checklist-item mt-1 rounded text-brand-600 focus:ring-brand-500 h-4 w-4 border-slate-300">
+                        <div class="ml-3">
+                            <span class="block text-sm font-semibold text-slate-900 group-hover:text-brand-700">1x Portapilas o Batería Externa AAA</span>
+                            <span class="text-xs text-slate-500">Para alimentar la micro:bit emisora (Mando).</span>
+                        </div>
+                    </label>
+
+                    <!-- Component 6 -->
+                    <label class="flex items-start p-4 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-slate-50 cursor-pointer transition-colors group">
+                        <input type="checkbox" onchange="updateChecklist()" class="checklist-item mt-1 rounded text-brand-600 focus:ring-brand-500 h-4 w-4 border-slate-300">
+                        <div class="ml-3">
+                            <span class="block text-sm font-semibold text-slate-900 group-hover:text-brand-700">Cable Micro-USB</span>
+                            <span class="text-xs text-slate-500">Para recargar la Wukong y flashear programas desde el ordenador.</span>
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 3: TRACCIÓN DIFERENCIAL (VISUAL EXPLANATION) -->
+        <section id="diferencial" class="scroll-mt-20 print-break-inside-avoid">
+            <div class="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-6 sm:p-8 text-white shadow-xl">
+                <div class="flex items-center space-x-3 mb-6">
+                    <div class="p-3 bg-brand-500/20 text-brand-300 rounded-xl border border-brand-500/30">
+                        <i data-lucide="compass" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold text-white">3. Principio Físico: Tracción Diferencial</h2>
+                        <p class="text-sm text-slate-400">¿Cómo gira un vehículo sin dirección mecánica de servomotor?</p>
+                    </div>
+                </div>
+
+                <div class="grid lg:grid-cols-4 gap-4">
+                    <!-- Movimiento: Avanzar -->
+                    <div class="bg-slate-800/80 p-5 rounded-xl border border-slate-700 hover:border-brand-500/50 transition-colors">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="font-bold text-emerald-400">Avanzar</span>
+                            <i data-lucide="arrow-up" class="w-5 h-5 text-emerald-400"></i>
+                        </div>
+                        <div class="space-y-2 text-xs font-mono">
+                            <div class="flex justify-between bg-slate-900/60 p-2 rounded">
+                                <span class="text-slate-400">Motor Izq (M1):</span>
+                                <span class="text-emerald-400 font-bold">+100%</span>
+                            </div>
+                            <div class="flex justify-between bg-slate-900/60 p-2 rounded">
+                                <span class="text-slate-400">Motor Der (M2):</span>
+                                <span class="text-emerald-400 font-bold">+100%</span>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-3">Ambas ruedas giran hacia adelante a la misma velocidad.</p>
+                    </div>
+
+                    <!-- Movimiento: Giro Izquierda -->
+                    <div class="bg-slate-800/80 p-5 rounded-xl border border-slate-700 hover:border-brand-500/50 transition-colors">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="font-bold text-sky-400">Giro Izquierda</span>
+                            <i data-lucide="rotate-ccw" class="w-5 h-5 text-sky-400"></i>
+                        </div>
+                        <div class="space-y-2 text-xs font-mono">
+                            <div class="flex justify-between bg-slate-900/60 p-2 rounded">
+                                <span class="text-slate-400">Motor Izq (M1):</span>
+                                <span class="text-rose-400 font-bold">-100% (o 0%)</span>
+                            </div>
+                            <div class="flex justify-between bg-slate-900/60 p-2 rounded">
+                                <span class="text-slate-400">Motor Der (M2):</span>
+                                <span class="text-emerald-400 font-bold">+100%</span>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-3">El motor derecho empuja mientras el izquierdo frena o invierte marcha.</p>
+                    </div>
+
+                    <!-- Movimiento: Giro Derecha -->
+                    <div class="bg-slate-800/80 p-5 rounded-xl border border-slate-700 hover:border-brand-500/50 transition-colors">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="font-bold text-purple-400">Giro Derecha</span>
+                            <i data-lucide="rotate-cw" class="w-5 h-5 text-purple-400"></i>
+                        </div>
+                        <div class="space-y-2 text-xs font-mono">
+                            <div class="flex justify-between bg-slate-900/60 p-2 rounded">
+                                <span class="text-slate-400">Motor Izq (M1):</span>
+                                <span class="text-emerald-400 font-bold">+100%</span>
+                            </div>
+                            <div class="flex justify-between bg-slate-900/60 p-2 rounded">
+                                <span class="text-slate-400">Motor Der (M2):</span>
+                                <span class="text-rose-400 font-bold">-100% (o 0%)</span>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-3">El motor izquierdo empuja mientras el derecho frena o invierte marcha.</p>
+                    </div>
+
+                    <!-- Movimiento: Parar -->
+                    <div class="bg-slate-800/80 p-5 rounded-xl border border-slate-700 hover:border-brand-500/50 transition-colors">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="font-bold text-rose-400">Detener</span>
+                            <i data-lucide="octagon-pause" class="w-5 h-5 text-rose-400"></i>
+                        </div>
+                        <div class="space-y-2 text-xs font-mono">
+                            <div class="flex justify-between bg-slate-900/60 p-2 rounded">
+                                <span class="text-slate-400">Motor Izq (M1):</span>
+                                <span class="text-slate-400 font-bold">0%</span>
+                            </div>
+                            <div class="flex justify-between bg-slate-900/60 p-2 rounded">
+                                <span class="text-slate-400">Motor Der (M2):</span>
+                                <span class="text-slate-400 font-bold">0%</span>
+                            </div>
+                        </div>
+                        <p class="text-xs text-slate-400 mt-3">Ambos motores se detienen por completo.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: SECUENCIA DIDÁCTICA (ACCORDION / TIMELINE) -->
+        <section id="sesiones" class="scroll-mt-20">
+            <div class="flex items-center space-x-3 mb-6">
+                <div class="p-3 bg-purple-100 text-purple-700 rounded-xl">
+                    <i data-lucide="calendar" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-900">4. Secuencia Didáctica por Sesiones</h2>
+                    <p class="text-sm text-slate-500">Planificación paso a paso para el desarrollo en el aula</p>
+                </div>
+            </div>
+
+            <div class="space-y-4">
+
+                <!-- Sesión 1 -->
+                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm transition-all">
+                    <button onclick="toggleAccordion('session-1')" class="w-full px-6 py-5 flex items-center justify-between bg-white hover:bg-slate-50 text-left transition-colors">
+                        <div class="flex items-center space-x-4">
+                            <span class="w-10 h-10 rounded-xl bg-brand-100 text-brand-700 font-bold flex items-center justify-center shrink-0">S1</span>
+                            <div>
+                                <h3 class="font-bold text-slate-900 text-base sm:text-lg">Sesión 1: Análisis del Reto y Tracción Diferencial</h3>
+                                <p class="text-xs text-slate-500">Fundamentos teóricos, formación de equipos y primeros bocetos en papel.</p>
+                            </div>
+                        </div>
+                        <i id="icon-session-1" data-lucide="chevron-down" class="w-5 h-5 text-slate-400 transition-transform"></i>
+                    </button>
+                    <div id="session-1" class="accordion-content hidden px-6 pb-6 pt-2 border-t border-slate-100 text-slate-600 text-sm space-y-3">
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/60 space-y-2">
+                            <h4 class="font-semibold text-slate-800">Actividades principales:</h4>
+                            <ul class="list-disc list-inside space-y-1 text-slate-600">
+                                <li>Presentación del problema real: ¿Cómo se mueven los tanques de oruga o los robots aspiradores?</li>
+                                <li>Explicación matemática y física básica del giro por diferencial de velocidad.</li>
+                                <li>Diseño en papel (boceto) del chasis libre: colocación de la placa Wukong, rueda loca (punto de apoyo) y motores.</li>
+                            </ul>
+                        </div>
+                        <div class="flex items-center justify-between text-xs text-slate-500 pt-2">
+                            <span><strong>Entregable:</strong> Boceto técnico firmado por el equipo.</span>
+                            <span><strong>Tiempo:</strong> 50 min</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sesión 2 -->
+                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm transition-all">
+                    <button onclick="toggleAccordion('session-2')" class="w-full px-6 py-5 flex items-center justify-between bg-white hover:bg-slate-50 text-left transition-colors">
+                        <div class="flex items-center space-x-4">
+                            <span class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 font-bold flex items-center justify-center shrink-0">S2</span>
+                            <div>
+                                <h3 class="font-bold text-slate-900 text-base sm:text-lg">Sesión 2: Construcción Mecánica del Vehículo</h3>
+                                <p class="text-xs text-slate-500">Ensamblaje del chasis con el Wonder Kit y fijación de la placa Wukong.</p>
+                            </div>
+                        </div>
+                        <i id="icon-session-2" data-lucide="chevron-down" class="w-5 h-5 text-slate-400 transition-transform"></i>
+                    </button>
+                    <div id="session-2" class="accordion-content hidden px-6 pb-6 pt-2 border-t border-slate-100 text-slate-600 text-sm space-y-3">
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/60 space-y-2">
+                            <h4 class="font-semibold text-slate-800">Pautas de montaje:</h4>
+                            <ul class="list-disc list-inside space-y-1 text-slate-600">
+                                <li>Montar los 2 motores de bloque Geekservo de forma simétrica.</li>
+                                <li>Asegurar un 3er punto de apoyo (rueda pivotante/loca o deslizador redondeado) para evitar vuelcos.</li>
+                                <li>Conectar los motores a los conectores **M1 (Izquierdo)** y **M2 (Derecho)** de la placa Wukong.</li>
+                                <li>Comprobar que el interruptor de encendido de la Wukong queda fácilmente accesible.</li>
+                            </ul>
+                        </div>
+                        <div class="flex items-center justify-between text-xs text-slate-500 pt-2">
+                            <span><strong>Entregable:</strong> Chasis completo ensamblado e inspeccionado.</span>
+                            <span><strong>Tiempo:</strong> 50 min</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sesión 3 -->
+                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm transition-all">
+                    <button onclick="toggleAccordion('session-3')" class="w-full px-6 py-5 flex items-center justify-between bg-white hover:bg-slate-50 text-left transition-colors">
+                        <div class="flex items-center space-x-4">
+                            <span class="w-10 h-10 rounded-xl bg-purple-100 text-purple-700 font-bold flex items-center justify-center shrink-0">S3</span>
+                            <div>
+                                <h3 class="font-bold text-slate-900 text-base sm:text-lg">Sesión 3: Programación por Radio en MakeCode</h3>
+                                <p class="text-xs text-slate-500">Creación del programa emisor (mando) y programa receptor (robot).</p>
+                            </div>
+                        </div>
+                        <i id="icon-session-3" data-lucide="chevron-down" class="w-5 h-5 text-slate-400 transition-transform"></i>
+                    </button>
+                    <div id="session-3" class="accordion-content hidden px-6 pb-6 pt-2 border-t border-slate-100 text-slate-600 text-sm space-y-3">
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/60 space-y-2">
+                            <h4 class="font-semibold text-slate-800">Pasos clave de programación:</h4>
+                            <ol class="list-decimal list-inside space-y-1 text-slate-600">
+                                <li>Importar la extensión <code class="bg-slate-200 px-1 py-0.5 rounded text-xs font-mono">wukong</code> en MakeCode.</li>
+                                <li>Establecer un <strong>Grupo de Radio Único</strong> (ej. Grupo 7) para evitar que mandos de otros grupos interfieran.</li>
+                                <li>Programar micro:bit Emisor: Enviar números (1=Avanzar, 2=Derecha, 3=Izquierda, 0=Stop) al pulsar botones A, B, A+B o al agitar.</li>
+                                <li>Programar micro:bit Receptor: Escuchar eventos <code class="bg-slate-200 px-1 py-0.5 rounded text-xs font-mono">al recibir radio (receivedNumber)</code> y accionar motores M1 y M2.</li>
+                            </ol>
+                        </div>
+                        <div class="flex items-center justify-between text-xs text-slate-500 pt-2">
+                            <span><strong>Entregable:</strong> Ambas placas flacheadas y sincronizadas.</span>
+                            <span><strong>Tiempo:</strong> 50 min</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sesión 4 -->
+                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm transition-all">
+                    <button onclick="toggleAccordion('session-4')" class="w-full px-6 py-5 flex items-center justify-between bg-white hover:bg-slate-50 text-left transition-colors">
+                        <div class="flex items-center space-x-4">
+                            <span class="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 font-bold flex items-center justify-center shrink-0">S4</span>
+                            <div>
+                                <h3 class="font-bold text-slate-900 text-base sm:text-lg">Sesión 4: Pruebas, Calibración y Troubleshooting</h3>
+                                <p class="text-xs text-slate-500">Pruebas en pista, corrección de sentido de giro de motores y ajuste de potencia.</p>
+                            </div>
+                        </div>
+                        <i id="icon-session-4" data-lucide="chevron-down" class="w-5 h-5 text-slate-400 transition-transform"></i>
+                    </button>
+                    <div id="session-4" class="accordion-content hidden px-6 pb-6 pt-2 border-t border-slate-100 text-slate-600 text-sm space-y-3">
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/60 space-y-2">
+                            <h4 class="font-semibold text-slate-800">Verificaciones comunes:</h4>
+                            <ul class="list-disc list-inside space-y-1 text-slate-600">
+                                <li>¿El coche avanza hacia atrás? Invertir polaridad en el código (<code class="bg-slate-200 px-1 py-0.5 rounded text-xs font-mono">-100</code> en lugar de <code class="bg-slate-200 px-1 py-0.5 rounded text-xs font-mono">100</code>) o dar la vuelta al conector físico del motor.</li>
+                                <li>¿El coche gira en sentido contrario? Intercambiar valores entre los puertos M1 y M2.</li>
+                                <li>Ajustar aceleración y balance para evitar que un motor empuje más que el otro.</li>
+                            </ul>
+                        </div>
+                        <div class="flex items-center justify-between text-xs text-slate-500 pt-2">
+                            <span><strong>Entregable:</strong> Vehículo perfectamente calibrado operando a control remoto.</span>
+                            <span><strong>Tiempo:</strong> 50 min</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sesión 5 -->
+                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm transition-all">
+                    <button onclick="toggleAccordion('session-5')" class="w-full px-6 py-5 flex items-center justify-between bg-white hover:bg-slate-50 text-left transition-colors">
+                        <div class="flex items-center space-x-4">
+                            <span class="w-10 h-10 rounded-xl bg-emerald-100 text-emerald-700 font-bold flex items-center justify-center shrink-0">S5</span>
+                            <div>
+                                <h3 class="font-bold text-slate-900 text-base sm:text-lg">Sesión 5: Demostración, Circuito de Pruebas y Evaluación</h3>
+                                <p class="text-xs text-slate-500">Competición amistosa de maniobrabilidad y coevaluación del proyecto.</p>
+                            </div>
+                        </div>
+                        <i id="icon-session-5" data-lucide="chevron-down" class="w-5 h-5 text-slate-400 transition-transform"></i>
+                    </button>
+                    <div id="session-5" class="accordion-content hidden px-6 pb-6 pt-2 border-t border-slate-100 text-slate-600 text-sm space-y-3">
+                        <div class="bg-slate-50 p-4 rounded-xl border border-slate-200/60 space-y-2">
+                            <h4 class="font-semibold text-slate-800">Actividades finales:</h4>
+                            <ul class="list-disc list-inside space-y-1 text-slate-600">
+                                <li>Recorrido de maniobrabilidad en circuito de conos/obstáculos.</li>
+                                <li>Presentación exprés de 2 minutos por equipo: explicando dificultades encontradas y mejoras estructurales relizadas.</li>
+                                <li>Cumplimentación de la rúbrica de evaluación y recogida del material.</li>
+                            </ul>
+                        </div>
+                        <div class="flex items-center justify-between text-xs text-slate-500 pt-2">
+                            <span><strong>Entregable:</strong> Rúbrica completada y desmontaje ordenado.</span>
+                            <span><strong>Tiempo:</strong> 50 min</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECTION 5: CÓDIGO MAKECODE (TABS INTERACTIVAS) -->
+        <section id="codigo" class="scroll-mt-20 print-break-inside-avoid">
+            <div class="bg-slate-900 rounded-2xl border border-slate-800 p-6 sm:p-8 text-slate-100 shadow-2xl">
+                
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 pb-6 border-b border-slate-800">
+                    <div class="flex items-center space-x-3">
+                        <div class="p-3 bg-brand-500/20 text-brand-400 rounded-xl border border-brand-500/30">
+                            <i data-lucide="code-2" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-bold text-white">5. Programación MakeCode</h2>
+                            <p class="text-sm text-slate-400">Códigos listos para copiar o transcribir a bloques</p>
+                        </div>
+                    </div>
+
+                    <!-- Tabs Header -->
+                    <div class="flex bg-slate-800/80 p-1.5 rounded-xl border border-slate-700/60 self-start md:self-auto no-print">
+                        <button onclick="switchTab('tab-mando')" id="btn-tab-mando" class="px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all bg-brand-500 text-white shadow-sm">
+                            <i data-lucide="gamepad-2" class="w-4 h-4 inline mr-1.5"></i> Mando (Emisor)
+                        </button>
+                        <button onclick="switchTab('tab-coche')" id="btn-tab-coche" class="px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-400 hover:text-white">
+                            <i data-lucide="bot" class="w-4 h-4 inline mr-1.5"></i> Vehículo Wukong (Receptor)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- TAB 1: EMISOR (MANDO) -->
+                <div id="tab-mando" class="tab-content space-y-4">
+                    <div class="flex items-center justify-between text-xs text-slate-400 bg-slate-800/50 px-4 py-2 rounded-lg">
+                        <span><strong>Placa:</strong> micro:bit 1 (Mando Emisor)</span>
+                        <button onclick="copyCode('code-mando')" class="hover:text-brand-400 flex items-center gap-1 transition-colors no-print">
+                            <i data-lucide="copy" class="w-4 h-4"></i> Copiar Código JavaScript
+                        </button>
+                    </div>
+
+                    <pre class="bg-slate-950 p-5 rounded-xl overflow-x-auto text-xs sm:text-sm font-mono border border-slate-800 text-emerald-400 leading-relaxed"><code id="code-mando">// ==========================================
+// CÓDIGO DEL MANDO A DISTANCIA (EMISOR)
+// ==========================================
+
+// Al iniciar: Configurar el canal de radio (DEBE SER IGUAL EN EL ROBOT)
+radio.setGroup(7)
+basic.showIcon(IconNames.Square) // Indicador de listo
+
+// Botón A: Avanzar (Envía 1)
+input.onButtonPressed(Button.A, function () {
+    radio.sendNumber(1)
+    basic.showArrow(ArrowNames.North)
+})
+
+// Botón B: Girar a la Derecha (Envía 2)
+input.onButtonPressed(Button.B, function () {
+    radio.sendNumber(2)
+    basic.showArrow(ArrowNames.East)
+})
+
+// Botones A+B juntos: Girar a la Izquierda (Envía 3)
+input.onButtonPressed(Button.AB, function () {
+    radio.sendNumber(3)
+    basic.showArrow(ArrowNames.West)
+})
+
+// Agitar el mando: Detener el vehículo (Envía 0)
+input.onGesture(Gesture.Shake, function () {
+    radio.sendNumber(0)
+    basic.showIcon(IconNames.No)
+})</code></pre>
+
+                    <!-- Block Diagram Explanation -->
+                    <div class="grid sm:grid-cols-4 gap-3 text-xs pt-2">
+                        <div class="p-3 bg-slate-800/60 rounded-lg border border-slate-700/50">
+                            <span class="font-bold text-slate-200 block mb-1">Botón A</span>
+                            <span class="text-slate-400">Transmite el número <code class="text-emerald-400">1</code> (Avanzar)</span>
+                        </div>
+                        <div class="p-3 bg-slate-800/60 rounded-lg border border-slate-700/50">
+                            <span class="font-bold text-slate-200 block mb-1">Botón B</span>
+                            <span class="text-slate-400">Transmite el número <code class="text-emerald-400">2</code> (Giro Der)</span>
+                        </div>
+                        <div class="p-3 bg-slate-800/60 rounded-lg border border-slate-700/50">
+                            <span class="font-bold text-slate-200 block mb-1">Botón A+B</span>
+                            <span class="text-slate-400">Transmite el número <code class="text-emerald-400">3</code> (Giro Izq)</span>
+                        </div>
+                        <div class="p-3 bg-slate-800/60 rounded-lg border border-slate-700/50">
+                            <span class="font-bold text-slate-200 block mb-1">Agitar (Shake)</span>
+                            <span class="text-slate-400">Transmite el número <code class="text-emerald-400">0</code> (Parar)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TAB 2: RECEPTOR (VEHÍCULO WUKONG) -->
+                <div id="tab-coche" class="tab-content hidden space-y-4">
+                    <div class="flex items-center justify-between text-xs text-slate-400 bg-slate-800/50 px-4 py-2 rounded-lg">
+                        <span><strong>Placa:</strong> micro:bit 2 + Placa Wukong (Receptor)</span>
+                        <button onclick="copyCode('code-coche')" class="hover:text-brand-400 flex items-center gap-1 transition-colors no-print">
+                            <i data-lucide="copy" class="w-4 h-4"></i> Copiar Código JavaScript
+                        </button>
+                    </div>
+
+                    <div class="bg-amber-500/10 border border-amber-500/30 p-3 rounded-lg text-xs text-amber-200 flex items-center gap-2">
+                        <i data-lucide="alert-triangle" class="w-4 h-4 text-amber-400 shrink-0"></i>
+                        <span>Importante: Añade primero la extensión <strong>Wukong</strong> en MakeCode: Busca <code class="bg-slate-900 px-1 py-0.5 rounded text-amber-300 font-mono">wukong</code> en el menú Extensiones.</span>
+                    </div>
+
+                    <pre class="bg-slate-950 p-5 rounded-xl overflow-x-auto text-xs sm:text-sm font-mono border border-slate-800 text-sky-400 leading-relaxed"><code id="code-coche">// ==========================================
+// CÓDIGO DEL VEHÍCULO WUKONG (RECEPTOR)
+// Requiere Extensión: wukong
+// ==========================================
+
+// Al iniciar: Mismo grupo de radio y detener motores
+radio.setGroup(7)
+wukong.stopAllMotor()
+basic.showIcon(IconNames.Happy)
+
+// Al recibir cualquier número por radiofrecuencia:
+radio.onReceivedNumber(function (receivedNumber) {
+    if (receivedNumber == 1) {
+        // ACCIÓN: Avanzar (M1 y M2 al 100% adelante)
+        wukong.setMotorSpeed(wukong.MotorList.M1, 100)
+        wukong.setMotorSpeed(wukong.MotorList.M2, 100)
+        basic.showArrow(ArrowNames.North)
+
+    } else if (receivedNumber == 2) {
+        // ACCIÓN: Girar Derecha (M1 avanza, M2 invierte)
+        wukong.setMotorSpeed(wukong.MotorList.M1, 100)
+        wukong.setMotorSpeed(wukong.MotorList.M2, -100)
+        basic.showArrow(ArrowNames.East)
+
+    } else if (receivedNumber == 3) {
+        // ACCIÓN: Girar Izquierda (M1 invierte, M2 avanza)
+        wukong.setMotorSpeed(wukong.MotorList.M1, -100)
+        wukong.setMotorSpeed(wukong.MotorList.M2, 100)
+        basic.showArrow(ArrowNames.West)
+
+    } else if (receivedNumber == 0) {
+        // ACCIÓN: Detener motores por completo
+        wukong.stopAllMotor()
+        basic.showIcon(IconNames.Asleep)
+    }
+})</code></pre>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECTION 6: RETOS EXTRA Y SOLUCIÓN DE PROBLEMAS -->
+        <section id="retos" class="scroll-mt-20 print-break-inside-avoid">
+            <div class="grid md:grid-cols-2 gap-8">
+                
+                <!-- Retos Extra -->
+                <div class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="p-3 bg-emerald-100 text-emerald-700 rounded-xl">
+                            <i data-lucide="zap" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-slate-900">Amplía el Proyecto (Retos Extra)</h3>
+                            <p class="text-xs text-slate-500">Para alumnado avanzado o grupos rápidos</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4 text-sm">
+                        <div class="p-4 bg-slate-50 rounded-xl border border-slate-200/80">
+                            <h4 class="font-bold text-slate-800 flex items-center mb-1">
+                                <i data-lucide="smartphone" class="w-4 h-4 mr-2 text-brand-600"></i> 1. Control Acelerómetro (Volante por Inclinación)
+                            </h4>
+                            <p class="text-slate-600 text-xs leading-relaxed">
+                                En lugar de botones, lee la inclinación del mando (<code class="bg-slate-200 px-1 rounded font-mono">input.rotation(Rotation.Pitch)</code> y <code class="bg-slate-200 px-1 rounded font-mono">Roll</code>) para dirigir el robot como si fuera un volante real.
+                            </p>
+                        </div>
+
+                        <div class="p-4 bg-slate-50 rounded-xl border border-slate-200/80">
+                            <h4 class="font-bold text-slate-800 flex items-center mb-1">
+                                <i data-lucide="sparkles" class="w-4 h-4 mr-2 text-amber-500"></i> 2. Luces y Sonido Wukong
+                            </h4>
+                            <p class="text-slate-600 text-xs leading-relaxed">
+                                Enciende los LED Neopixel integrados en la parte inferior de la placa Wukong: color rojo al frenar, parpadeo azul/rojo al girar o claxon al pulsar la pantalla táctil de la micro:bit.
+                            </p>
+                        </div>
+
+                        <div class="p-4 bg-slate-50 rounded-xl border border-slate-200/80">
+                            <h4 class="font-bold text-slate-800 flex items-center mb-1">
+                                <i data-lucide="shield-alert" class="w-4 h-4 mr-2 text-rose-500"></i> 3. Frenado Autónomo Anti-colisión
+                            </h4>
+                            <p class="text-slate-600 text-xs leading-relaxed">
+                                Conecta un sensor de ultrasonidos en el frontal. Si el vehículo detecta una pared a menos de 10 cm, anula la orden del mando y detiene automáticamente los motores.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Solución de Problemas (Troubleshooting) -->
+                <div class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm">
+                    <div class="flex items-center space-x-3 mb-6">
+                        <div class="p-3 bg-rose-100 text-rose-700 rounded-xl">
+                            <i data-lucide="help-circle" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-slate-900">Guía de Solución de Errores</h3>
+                            <p class="text-xs text-slate-500">Incidencias habituales en el aula</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4 text-sm">
+                        <div class="p-4 bg-rose-50/50 rounded-xl border border-rose-100">
+                            <span class="font-bold text-rose-900 text-xs uppercase tracking-wider block mb-1">Problema: Interference entre varios grupos</span>
+                            <p class="text-slate-700 text-xs">
+                                <strong>Solución:</strong> Asegúrate de que cada pareja/grupo tenga asignado un número de radio diferente en <code class="bg-rose-100 text-rose-800 px-1 rounded font-mono">radio.setGroup(N)</code> (por ejemplo, Grupo 1 usa el canal 1, Grupo 2 el 2, etc.).
+                            </p>
+                        </div>
+
+                        <div class="p-4 bg-amber-50/50 rounded-xl border border-amber-100">
+                            <span class="font-bold text-amber-900 text-xs uppercase tracking-wider block mb-1">Problema: El coche gira en círculos al avanzar</span>
+                            <p class="text-slate-700 text-xs">
+                                <strong>Solución:</strong> Uno de los motores está montado al revés. Invierte la polaridad en el código enviando <code class="bg-amber-100 text-amber-800 px-1 rounded font-mono">-100</code> a ese motor específico o gira físicamente el conector del cable del motor en la Wukong.
+                            </p>
+                        </div>
+
+                        <div class="p-4 bg-blue-50/50 rounded-xl border border-blue-100">
+                            <span class="font-bold text-blue-900 text-xs uppercase tracking-wider block mb-1">Problema: La micro:bit del coche se reinicia sola</span>
+                            <p class="text-slate-700 text-xs">
+                                <strong>Solución:</strong> La batería de la placa Wukong está descargada. Conecta la placa Wukong por cable micro-USB hasta que los LEDs azules de carga de la placa se estabilicen.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- SECTION 7: RÚBRICA DE EVALUACIÓN INTERACTIVA -->
+        <section id="rubrica" class="scroll-mt-20">
+            <div class="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm">
+                
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                    <div class="flex items-center space-x-3">
+                        <div class="p-3 bg-brand-100 text-brand-700 rounded-xl">
+                            <i data-lucide="clipboard-check" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-bold text-slate-900">6. Rúbrica de Evaluación e Calculadora de Nota</h2>
+                            <p class="text-sm text-slate-500">Selecciona el nivel de desempeño de cada criterio para obtener la nota final</p>
+                        </div>
+                    </div>
+
+                    <!-- Live Grade Score Badge -->
+                    <div class="bg-slate-900 text-white px-5 py-3 rounded-2xl flex items-center justify-between sm:justify-start space-x-4 shadow-lg shrink-0">
+                        <div>
+                            <div class="text-[10px] text-slate-400 uppercase tracking-widest font-semibold">Nota Calculada</div>
+                            <div id="final-score" class="text-2xl font-black text-brand-400">10.0 / 10</div>
+                        </div>
+                        <span id="score-label" class="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
+                            Sobresaliente
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Rubric Interactive Table -->
+                <div class="overflow-x-auto border border-slate-200 rounded-xl">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-100 text-slate-700 text-xs uppercase tracking-wider border-b border-slate-200">
+                                <th class="p-4 font-bold">Criterio</th>
+                                <th class="p-4 font-bold w-1/4">Insuficiente (4.0)</th>
+                                <th class="p-4 font-bold w-1/4">Aceptable (7.0)</th>
+                                <th class="p-4 font-bold w-1/4">Excelente (10.0)</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-200 text-sm">
+                            
+                            <!-- Criterion 1 -->
+                            <tr class="hover:bg-slate-50/50 transition-colors">
+                                <td class="p-4 font-medium text-slate-900">
+                                    <div class="font-bold">1. Diseño y Estabilidad Mecánica</div>
+                                    <div class="text-xs text-slate-500 font-normal">Rigidez del chasis, tracción y equilibrio de pesos.</div>
+                                </td>
+                                <td class="p-3">
+                                    <label class="block p-3 rounded-xl border border-slate-200 hover:border-brand-300 cursor-pointer transition-all has-[:checked]:bg-brand-50 has-[:checked]:border-brand-500">
+                                        <input type="radio" name="crit1" value="4" onchange="calculateScore()" class="sr-only">
+                                        <span class="text-xs text-slate-600 block">Estructura frágil, pierde piezas o vuelca constantemente al girar.</span>
+                                    </label>
+                                </td>
+                                <td class="p-3">
+                                    <label class="block p-3 rounded-xl border border-slate-200 hover:border-brand-300 cursor-pointer transition-all has-[:checked]:bg-brand-50 has-[:checked]:border-brand-500">
+                                        <input type="radio" name="crit1" value="7" onchange="calculateScore()" class="sr-only">
+                                        <span class="text-xs text-slate-600 block">Estructura funcional con pequeños problemas de fricción o rozamiento.</span>
+                                    </label>
+                                </td>
+                                <td class="p-3">
+                                    <label class="block p-3 rounded-xl border border-slate-200 hover:border-brand-300 cursor-pointer transition-all has-[:checked]:bg-brand-50 has-[:checked]:border-brand-500">
+                                        <input type="radio" name="crit1" value="10" checked onchange="calculateScore()" class="sr-only">
+                                        <span class="text-xs text-slate-600 block">Diseño robusto, estético, excelente balance de peso y giro fluido.</span>
+                                    </label>
+                                </td>
+                            </tr>
+
+                            <!-- Criterion 2 -->
+                            <tr class="hover:bg-slate-50/50 transition-colors">
+                                <td class="p-4 font-medium text-slate-900">
+                                    <div class="font-bold">2. Programación y Radiofrecuencia</div>
+                                    <div class="text-xs text-slate-500 font-normal">Lógica en MakeCode, respuesta a órdenes y canal.</div>
+                                </td>
+                                <td class="p-3">
+                                    <label class="block p-3 rounded-xl border border-slate-200 hover:border-brand-300 cursor-pointer transition-all has-[:checked]:bg-brand-50 has-[:checked]:border-brand-500">
+                                        <input type="radio" name="crit2" value="4" onchange="calculateScore()" class="sr-only">
+                                        <span class="text-xs text-slate-600 block">No logra la comunicación por radio o los motores responden sin control.</span>
+                                    </label>
+                                </td>
+                                <td class="p-3">
+                                    <label class="block p-3 rounded-xl border border-slate-200 hover:border-brand-300 cursor-pointer transition-all has-[:checked]:bg-brand-50 has-[:checked]:border-brand-500">
+                                        <input type="radio" name="crit2" value="7" onchange="calculateScore()" class="sr-only">
+                                        <span class="text-xs text-slate-600 block">Responde a las órdenes principales pero presenta desfase o giros imprecisos.</span>
+                                    </label>
+                                </td>
+                                <td class="p-3">
+                                    <label class="block p-3 rounded-xl border border-slate-200 hover:border-brand-300 cursor-pointer transition-all has-[:checked]:bg-brand-50 has-[:checked]:border-brand-500">
+                                        <input type="radio" name="crit2" value="10" checked onchange="calculateScore()" class="sr-only">
+                                        <span class="text-xs text-slate-600 block">Control total e inmediato del móvil, código optimizado y limpio.</span>
+                                    </label>
+                                </td>
+                            </tr>
+
+                            <!-- Criterion 3 -->
+                            <tr class="hover:bg-slate-50/50 transition-colors">
+                                <td class="p-4 font-medium text-slate-900">
+                                    <div class="font-bold">3. Trabajo Colaborativo y Resolución</div>
+                                    <div class="text-xs text-slate-500 font-normal">Reparto de roles, autonomía y superación de fallos.</div>
+                                </td>
+                                <td class="p-3">
+                                    <label class="block p-3 rounded-xl border border-slate-200 hover:border-brand-300 cursor-pointer transition-all has-[:checked]:bg-brand-50 has-[:checked]:border-brand-500">
+                                        <input type="radio" name="crit3" value="4" onchange="calculateScore()" class="sr-only">
+                                        <span class="text-xs text-slate-600 block">Dependencia constante del profesorado; conflictos de grupo sin resolver.</span>
+                                    </label>
+                                </td>
+                                <td class="p-3">
+                                    <label class="block p-3 rounded-xl border border-slate-200 hover:border-brand-300 cursor-pointer transition-all has-[:checked]:bg-brand-50 has-[:checked]:border-brand-500">
+                                        <input type="radio" name="crit3" value="7" onchange="calculateScore()" class="sr-only">
+                                        <span class="text-xs text-slate-600 block">Reparto adecuado de funciones (mando/vehículo) y colaboración estándar.</span>
+                                    </label>
+                                </td>
+                                <td class="p-3">
+                                    <label class="block p-3 rounded-xl border border-slate-200 hover:border-brand-300 cursor-pointer transition-all has-[:checked]:bg-brand-50 has-[:checked]:border-brand-500">
+                                        <input type="radio" name="crit3" value="10" checked onchange="calculateScore()" class="sr-only">
+                                        <span class="text-xs text-slate-600 block">Excelente trabajo en equipo, resolución autónoma de bugs y apoyo a otros grupos.</span>
+                                    </label>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-slate-400 border-t border-slate-800 py-10 mt-20 no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
+            <div class="flex items-center space-x-3">
+                <div class="p-2 bg-brand-500 text-white rounded-lg font-bold text-sm">
+                    m:b
+                </div>
+                <div>
+                    <div class="text-white font-bold text-sm">Proyecto STEM: Vehículo Radio micro:bit</div>
+                    <div class="text-xs text-slate-500">Basado en ELECFREAKS Wonder Building Kit & Placa Wukong</div>
+                </div>
+            </div>
+
+            <div class="text-xs text-slate-500 text-center md:text-right">
+                <p>Diseñado para educación secundaria y robótica escolar.</p>
+                <p class="mt-1">Compatible con BBC micro:bit V1 y V2.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT FOR INTERACTION -->
+    <script>
+        // Initialize Lucide Icons
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+            updateChecklist();
+            calculateScore();
+        });
+
+        // Interactive Checklist Progress Counter
+        function updateChecklist() {
+            const checkboxes = document.querySelectorAll('.checklist-item');
+            const total = checkboxes.length;
+            let checked = 0;
+            
+            checkboxes.forEach(cb => {
+                if (cb.checked) checked++;
+            });
+
+            const counter = document.getElementById('checklist-counter');
+            const progressBar = document.getElementById('checklist-progress');
+
+            if (counter && progressBar) {
+                counter.innerText = `${checked} / ${total}`;
+                const percentage = (checked / total) * 100;
+                progressBar.style.width = `${percentage}%`;
+            }
+        }
+
+        // Accordion Toggle Logic
+        function toggleAccordion(id) {
+            const content = document.getElementById(id);
+            const icon = document.getElementById(`icon-${id}`);
+
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                if (icon) icon.style.transform = 'rotate(180deg)';
+            } else {
+                content.classList.add('hidden');
+                if (icon) icon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        // Code Tab Switcher
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            
+            const btnMando = document.getElementById('btn-tab-mando');
+            const btnCoche = document.getElementById('btn-tab-coche');
+
+            if (tabId === 'tab-mando') {
+                document.getElementById('tab-mando').classList.remove('hidden');
+                btnMando.className = "px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all bg-brand-500 text-white shadow-sm";
+                btnCoche.className = "px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-400 hover:text-white";
+            } else {
+                document.getElementById('tab-coche').classList.remove('hidden');
+                btnCoche.className = "px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all bg-brand-500 text-white shadow-sm";
+                btnMando.className = "px-4 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all text-slate-400 hover:text-white";
+            }
+        }
+
+        // Copy Code Functionality (No alert used, shows custom smooth toast)
+        function copyCode(elementId) {
+            const codeText = document.getElementById(elementId).innerText;
+            
+            // Temporary textarea to trigger execCommand('copy') safely in frames
+            const tempArea = document.createElement('textarea');
+            tempArea.value = codeText;
+            document.body.appendChild(tempArea);
+            tempArea.select();
+            
+            try {
+                document.execCommand('copy');
+                showToast('¡Código copiado con éxito al portapapeles!');
+            } catch (err) {
+                showToast('No se pudo copiar automáticamente.');
+            }
+            
+            document.body.removeChild(tempArea);
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-message');
+            
+            toastMsg.innerText = message;
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 2500);
+        }
+
+        // Interactive Score Calculator for Rubric
+        function calculateScore() {
+            const c1 = parseFloat(document.querySelector('input[name="crit1"]:checked')?.value || 0);
+            const c2 = parseFloat(document.querySelector('input[name="crit2"]:checked')?.value || 0);
+            const c3 = parseFloat(document.querySelector('input[name="crit3"]:checked')?.value || 0);
+
+            const average = ((c1 + c2 + c3) / 3).toFixed(1);
+            
+            const scoreDisplay = document.getElementById('final-score');
+            const labelDisplay = document.getElementById('score-label');
+
+            if (scoreDisplay) {
+                scoreDisplay.innerText = `${average} / 10`;
+            }
+
+            if (labelDisplay) {
+                if (average >= 8.5) {
+                    labelDisplay.innerText = "Sobresaliente";
+                    labelDisplay.className = "px-3 py-1 rounded-full text-xs font-semibold bg-emerald-500/20 text-emerald-300 border border-emerald-500/30";
+                } else if (average >= 6.0) {
+                    labelDisplay.innerText = "Notable / Aceptable";
+                    labelDisplay.className = "px-3 py-1 rounded-full text-xs font-semibold bg-blue-500/20 text-blue-300 border border-blue-500/30";
+                } else {
+                    labelDisplay.innerText = "En Revisión";
+                    labelDisplay.className = "px-3 py-1 rounded-full text-xs font-semibold bg-rose-500/20 text-rose-300 border border-rose-500/30";
+                }
+            }
+        }
+    </script>
+</body>
+</html>
